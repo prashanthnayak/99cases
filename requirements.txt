@@ -1,5 +1,5 @@
 # Web framework
-python-fasthtml==0.12.30
+python-fasthtml==0.13.3
 monsterui==1.0.30
 
 # Auth

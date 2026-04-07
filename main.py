@@ -43,20 +43,8 @@ document.addEventListener('htmx:configRequest', function (ev) {
 bware = Beforeware(before, skip=["/favicon.ico"])
 
 _APP_DIR = Path(__file__).resolve().parent
-# Session signing: fast_app has no "sess_secret" kwarg (it was ignored). Use SESSION_SECRET
-# from the environment, otherwise a stable .sesskey next to this app — not cwd (cwd changes
-# break cookies and look like "all data vanished" after restart).
-app, rt = fast_app(
-    hdrs=hdrs,
-    before=bware,
-    secret_key=os.getenv("SESSION_SECRET"),
-    key_fname=str(_APP_DIR / ".sesskey"),
-)
-
-register_routes(rt)
 
 
-@app.exception_handler(404)
 async def not_found(request, exc):
     return HTMLResponse(
         """<!DOCTYPE html><html><body style="font-family:system-ui,sans-serif;text-align:center;margin-top:5rem;">
@@ -68,7 +56,6 @@ async def not_found(request, exc):
     )
 
 
-@app.exception_handler(500)
 async def server_error(request, exc):
     return HTMLResponse(
         """<!DOCTYPE html><html><body style="font-family:system-ui,sans-serif;text-align:center;margin-top:5rem;">
@@ -78,6 +65,21 @@ async def server_error(request, exc):
 </body></html>""",
         status_code=500,
     )
+
+
+# Session signing: fast_app has no "sess_secret" kwarg (it was ignored). Use SESSION_SECRET
+# from the environment, otherwise a stable .sesskey next to this app — not cwd (cwd changes
+# break cookies and look like "all data vanished" after restart).
+# FastHTML 0.13+: register handlers via exception_handlers= (not @app.exception_handler).
+app, rt = fast_app(
+    hdrs=hdrs,
+    before=bware,
+    secret_key=os.getenv("SESSION_SECRET"),
+    key_fname=str(_APP_DIR / ".sesskey"),
+    exception_handlers={404: not_found, 500: server_error},
+)
+
+register_routes(rt)
 
 
 if __name__ == "__main__":
