@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+.sesskey
+*.log
+__pycache__/
+*.py[cod]
+.Python
+venv/
+.venv/
+.pytest_cache/
+.mypy_cache/
+.DS_Store
+.cursor/
+*.sqlite
