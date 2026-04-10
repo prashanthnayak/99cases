@@ -1,10 +1,12 @@
 import json
 import sqlite3
+from datetime import datetime
 
 from fasthtml.common import *
 from monsterui.all import *
 
 from capsolver_ecourts import scrape_ecourts
+from date_normalize import normalize_date_for_db
 from components import (
     ClientDetails,
     MonsterForm,
@@ -26,6 +28,21 @@ from validation import (
     validate_cnr,
     validate_history_list,
 )
+
+
+def _sort_case_history_rows_desc(rows: list[tuple]) -> list[tuple]:
+    """Rows are (judge, hearing_date, purpose). Newest hearing first (chronological, not lexicographic)."""
+
+    def _key(row: tuple) -> datetime:
+        norm = normalize_date_for_db((row[1] or "").strip())
+        if not norm:
+            return datetime.min
+        try:
+            return datetime.strptime(norm[:10], "%d-%m-%Y")
+        except ValueError:
+            return datetime.min
+
+    return sorted(rows, key=_key, reverse=True)
 
 
 def db_case_lookup_fragment(cnr: str, user_id: int):
@@ -50,6 +67,7 @@ def db_case_lookup_fragment(cnr: str, user_id: int):
                 f"SELECT judge, hearing_date, purpose FROM case_history WHERE case_id IN ({ph}) OR (case_id IS NULL AND cnr_number=?)",
                 tuple(case_ids) + (cnr,),
             ).fetchall()
+        hist_rows = _sort_case_history_rows_desc(hist_rows)
     finally:
         conn.close()
 
