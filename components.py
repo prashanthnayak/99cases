@@ -264,7 +264,7 @@ def ex_card3(total_cases: int, hearings_today: int, appointments_today: int):
     team = [
         dash_card("Total Cases", str(total_cases)),
         dash_card("Hearings Today", str(hearings_today)),
-        dash_card("Appointments", str(appointments_today)),
+        dash_card("Appointments Today", str(appointments_today)),
     ]
     return Grid(*team, cols=3, cls="gap-6")
 
@@ -392,7 +392,7 @@ def appointment_form_card():
         Div(
             H3("New appointment", cls="text-xl font-bold text-gray-800"),
             P(
-                "Non-court appointments (meetings, deadlines, reminders). Saved under your user only.",
+                "Non-court appointments (meetings, deadlines, reminders).",
                 cls="text-sm text-gray-500 mt-1 mb-6",
             ),
             AppointmentForm(),

@@ -86,7 +86,7 @@ def register(rt):
                 Div(
                     H2("Appointments", cls="text-2xl font-bold text-gray-800 tracking-tight"),
                     P(
-                        "Non-court appointments only (not linked to a case). Court hearings stay on case import.",
+                        "Non-court appointments only (not linked to a case).",
                         cls="text-gray-600 text-sm mt-1 max-w-2xl",
                     ),
                     Button(

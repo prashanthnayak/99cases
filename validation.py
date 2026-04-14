@@ -5,22 +5,22 @@ import re
 from typing import Any
 
 # --- Limits (adjust to your policy) ---
-MAX_CNR_LEN = 64
+MAX_CNR_LEN = 16
 # eCourts CNR is often 16 chars; raise to 16 if you want to reject shorter test inputs.
-MIN_CNR_LEN = 6
+MIN_CNR_LEN = 16
 MAX_TEXT_FIELD = 500
 MAX_COURT_FIELD = 600
-MAX_EMAIL_LEN = 320
-MAX_PHONE_LEN = 40
+MAX_EMAIL_LEN = 30
+MAX_PHONE_LEN = 10
 MAX_HISTORY_JSON_CHARS = 2_000_000
 MAX_HISTORY_ROWS = 2000
 MAX_JUDGE_LEN = 500
-MAX_PURPOSE_LEN = 2000
-MAX_EVENT_TITLE = 500
+MAX_PURPOSE_LEN = 100
+MAX_EVENT_TITLE = 50
 MAX_NOTES = 8000
 MAX_EVENT_TYPE = 120
-MAX_USERNAME_LEN = 20
-MAX_PASSWORD_LEN = 20
+MAX_USERNAME_LEN = 30
+MAX_PASSWORD_LEN = 30
 
 # Indian eCourts CNR-style: letters, digits, hyphens; no arbitrary punctuation.
 CNR_PATTERN = re.compile(r"^[A-Za-z0-9\-]+$")
